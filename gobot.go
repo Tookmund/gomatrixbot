@@ -6,7 +6,9 @@ import (
 	"os"
 )
 
-func Login() *gomatrix.Client {
+type Client *gomatrix.Client
+
+func Login() Client {
 	user, pass, homeserver := getsecret()
 	cli, _ := gomatrix.NewClient(homeserver, "", "")
 	resp, err := cli.Login(&gomatrix.ReqLogin{
@@ -21,9 +23,10 @@ func Login() *gomatrix.Client {
 	go sync(cli)
 	return cli
 }
-func sync(cli *gomatrix.Client) {
+func sync(cli Client) {
+	cligm := gomatrix.Client(*cli)
 	for {
-		if err := cli.Sync(); err != nil {
+		if err := cligm.Sync(); err != nil {
 			fmt.Println("Sync() returned ", err)
 		}
 	}
