@@ -7,7 +7,7 @@ import (
 	"os"
 )
 func main() {
-	cli := gomatrixbot.Login("https://matrix.org")
+	cli := gomatrixbot.Login()
 	roomid := roomid()
 	user := gomatrixbot.User()
 	syncer := cli.Syncer.(*gomatrix.DefaultSyncer)

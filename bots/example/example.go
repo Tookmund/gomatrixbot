@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	cli := gomatrixbot.Login("https://matrix.org")
+	cli := gomatrixbot.Login()
 	user := gomatrixbot.User()
 	syncer := cli.Syncer.(*gomatrix.DefaultSyncer)
 	syncer.OnEventType("m.room.message", func(ev *gomatrix.Event) {
