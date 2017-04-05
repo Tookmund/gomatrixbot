@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 )
-var username string
 
 func Login() *gomatrix.Client {
 	user, pass, homeserver := getsecret()
@@ -18,7 +17,6 @@ func Login() *gomatrix.Client {
 	if err != nil {
 		panic(err)
 	}
-	username = resp.UserID
 	cli.SetCredentials(resp.UserID, resp.AccessToken)
 	go sync(cli)
 	return cli
@@ -39,8 +37,4 @@ func getsecret() (user, pass, homeserver string) {
 	}
 	fmt.Fscan(file, &user, &pass, &homeserver)
 	return 
-}
-
-func User() string {
-	return username
 }
