@@ -9,11 +9,10 @@ import (
 func main() {
 	cli := gomatrixbot.Login()
 	roomid := roomid()
-	user := gomatrixbot.User()
 	syncer := cli.Syncer.(*gomatrix.DefaultSyncer)
 	syncer.OnEventType("m.room.message", func(ev *gomatrix.Event) {
 		body, ok := ev.Body()
-		if ok && ev.Sender != user {
+		if ok && ev.Sender != cli.UserID {
 			fmt.Println(ev.Sender, ": ", body)
 		}	
 	})
