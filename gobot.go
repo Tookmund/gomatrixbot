@@ -4,8 +4,6 @@ import (
 	"github.com/matrix-org/gomatrix"
 	"fmt"
 	"os"
-	"strings"
-	"io/ioutil"
 )
 var username string
 
@@ -34,15 +32,12 @@ func sync(cli *gomatrix.Client) {
 }
 
 func getsecret() (user, pass string) {
-	userbuf, err := ioutil.ReadFile("password")
+	file, err := os.Open("password")
 	if err != nil {
-		fmt.Print("Cannot find password file!\n")
+		fmt.Println(err)
 		os.Exit(0)
 	}
-	fulluser := string(userbuf[:])
-	userarray := strings.Split(fulluser, "\n")
-	user = userarray[0]
-	pass = userarray[1]
+	fmt.Fscan(file, &user, &pass)
 	return 
 }
 
