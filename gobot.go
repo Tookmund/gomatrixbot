@@ -1,4 +1,4 @@
-package main
+package gomatrixbot
 
 import (
 	"github.com/matrix-org/gomatrix"
@@ -8,18 +8,24 @@ import (
 	"bytes"
 	"io/ioutil"
 )
+var roomid string
+var username string
 
-func login(homeserver, username, password string) *gomatrix.Client {
+func Login(homeserver string) *gomatrix.Client {
+	user, pass, room := getsecret()
+	roomid = room
+	username = user
 	cli, _ := gomatrix.NewClient(homeserver, "", "")
 	resp, err := cli.Login(&gomatrix.ReqLogin{
 		Type: "m.login.password",
-		User: username,
-		Password: password,
+		User: user,
+		Password: pass,
 	})
 	if err != nil {
 		panic(err)
 	}
 	cli.SetCredentials(resp.UserID, resp.AccessToken)
+	go sync(cli)
 	return cli
 }
 func sync(cli *gomatrix.Client) {
@@ -48,4 +54,12 @@ func getsecret() (user, pass, room string) {
 	user = userarray[0]
 	pass = userarray[1]
 	return 
+}
+
+func RoomId() string {
+	return roomid
+}
+
+func User() string {
+	return username
 }
