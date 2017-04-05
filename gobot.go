@@ -7,6 +7,7 @@ import (
 )
 
 type Client *gomatrix.Client
+type EventCallback gomatrix.OnEventListener
 
 func Login() Client {
 	user, pass, homeserver := getsecret()
@@ -40,4 +41,9 @@ func getsecret() (user, pass, homeserver string) {
 	}
 	fmt.Fscan(file, &user, &pass, &homeserver)
 	return 
+}
+
+func HandleEvent(cli Client, event string, callback EventCallback) {
+	syncer := gomatrix.Client(*cli).Syncer.(*gomatrix.DefaultSyncer)
+	syncer.OnEventType(event, gomatrix.OnEventListener(callback))
 }
