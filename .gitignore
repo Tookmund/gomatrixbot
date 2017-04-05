@@ -1,5 +1,5 @@
 roomid
-password
+login
 gomatrixbot
 bots/*/*
 !bots/*/*.go

@@ -30,7 +30,7 @@ func sync(cli *gomatrix.Client) {
 }
 
 func getsecret() (user, pass, homeserver string) {
-	file, err := os.Open("password")
+	file, err := os.Open("login")
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(0)
