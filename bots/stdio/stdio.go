@@ -36,6 +36,5 @@ func roomid() (room string) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(room)
 	return
 }
