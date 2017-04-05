@@ -1,4 +1,5 @@
 roomid
 password
 gomatrixbot
-bots/stdio/stdio
+bots/*/*
+!bots/*/*.go
