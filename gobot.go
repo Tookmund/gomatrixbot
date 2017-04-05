@@ -5,15 +5,12 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"bytes"
 	"io/ioutil"
 )
-var roomid string
 var username string
 
 func Login(homeserver string) *gomatrix.Client {
-	user, pass, room := getsecret()
-	roomid = room
+	user, pass := getsecret()
 	username = user
 	cli, _ := gomatrix.NewClient(homeserver, "", "")
 	resp, err := cli.Login(&gomatrix.ReqLogin{
@@ -36,14 +33,7 @@ func sync(cli *gomatrix.Client) {
 	}
 }
 
-func getsecret() (user, pass, room string) {
-	roombuf, err := ioutil.ReadFile("roomid")
-	if err != nil {
-		fmt.Print("Cannot find roomid file!\n")
-		os.Exit(0)
-	}
-	n := bytes.IndexByte(roombuf,'\n')
-	room = string(roombuf[:n])
+func getsecret() (user, pass string) {
 	userbuf, err := ioutil.ReadFile("password")
 	if err != nil {
 		fmt.Print("Cannot find password file!\n")
@@ -54,10 +44,6 @@ func getsecret() (user, pass, room string) {
 	user = userarray[0]
 	pass = userarray[1]
 	return 
-}
-
-func RoomId() string {
-	return roomid
 }
 
 func User() string {
