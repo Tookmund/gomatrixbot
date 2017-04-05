@@ -7,9 +7,9 @@ import (
 	"os"
 )
 func main() {
+	cli := gomatrixbot.Login("https://matrix.org")
 	roomid := gomatrixbot.RoomId()
 	user := gomatrixbot.User()
-	cli := gomatrixbot.Login("https://matrix.org")
 	syncer := cli.Syncer.(*gomatrix.DefaultSyncer)
 	syncer.OnEventType("m.room.message", func(ev *gomatrix.Event) {
 		body, ok := ev.Body()
