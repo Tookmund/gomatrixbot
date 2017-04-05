@@ -9,7 +9,6 @@ var username string
 
 func Login(homeserver string) *gomatrix.Client {
 	user, pass := getsecret()
-	username = user
 	cli, _ := gomatrix.NewClient(homeserver, "", "")
 	resp, err := cli.Login(&gomatrix.ReqLogin{
 		Type: "m.login.password",
@@ -19,6 +18,7 @@ func Login(homeserver string) *gomatrix.Client {
 	if err != nil {
 		panic(err)
 	}
+	username = resp.UserID
 	cli.SetCredentials(resp.UserID, resp.AccessToken)
 	go sync(cli)
 	return cli
