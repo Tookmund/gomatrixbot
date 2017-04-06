@@ -12,14 +12,11 @@ func main() {
 	roomid := roomid()
 	cli.HandleEvent("m.room.message", func(ev *gomatrix.Event) {
 		body, ok := ev.Body()
-		if ok {
-			fmt.Println(ev.Sender, ": ", body)
-			if ev.Sender != cli.UserID() {
-				var sides, number int
-				_, err := fmt.Sscanf(body,"%dd%d",&number, &sides)
-				if err == nil {
-					cli.SendText(roomid, body+": "+strconv.Itoa(dice.Roll(sides,number)))
-				}	
+		if ok && ev.Sender != cli.UserID() {
+			var sides, number int
+			_, err := fmt.Sscanf(body,"%dd%d",&number, &sides)
+			if err == nil {
+				cli.SendText(roomid, body+": "+strconv.Itoa(dice.Roll(sides,number)))
 			}	
 		}	
 	})
