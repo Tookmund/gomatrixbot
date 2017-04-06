@@ -16,7 +16,7 @@ func main() {
 			var sides, number int
 			_, err := fmt.Sscanf(body,"%dd%d",&number, &sides)
 			if err == nil {
-				cli.SendText(roomid, body+": "+strconv.Itoa(dice.Roll(sides,number)))
+				cli.SendText(roomid, ev.Sender+" "+body+": "+strconv.Itoa(dice.Roll(sides,number)))
 			}	
 		}	
 	})
