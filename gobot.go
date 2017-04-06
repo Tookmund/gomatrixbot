@@ -6,10 +6,12 @@ import (
 	"os"
 )
 
-type Client *gomatrix.Client
+type Client struct {
+	client *gomatrix.Client
+}
 type EventCallback gomatrix.OnEventListener
 
-func Login() Client {
+func Login() *Client {
 	user, pass, homeserver := getsecret()
 	cli, _ := gomatrix.NewClient(homeserver, "", "")
 	resp, err := cli.Login(&gomatrix.ReqLogin{
@@ -21,13 +23,14 @@ func Login() Client {
 		panic(err)
 	}
 	cli.SetCredentials(resp.UserID, resp.AccessToken)
-	go sync(cli)
-	return cli
+	client := &Client{cli}
+	go sync(client)
+	return client
 }
-func sync(cli Client) {
-	cligm := gomatrix.Client(*cli)
+
+func sync(cli *Client) {
 	for {
-		if err := cligm.Sync(); err != nil {
+		if err := cli.client.Sync(); err != nil {
 			fmt.Println("Sync() returned ", err)
 		}
 	}
@@ -43,7 +46,16 @@ func getsecret() (user, pass, homeserver string) {
 	return 
 }
 
-func HandleEvent(cli Client, event string, callback EventCallback) {
-	syncer := gomatrix.Client(*cli).Syncer.(*gomatrix.DefaultSyncer)
+func (cli Client) HandleEvent(event string, callback EventCallback) {
+	syncer := cli.client.Syncer.(*gomatrix.DefaultSyncer)
 	syncer.OnEventType(event, gomatrix.OnEventListener(callback))
+}
+
+func (cli Client) SendText(roomid, text string) error {
+	_, err := cli.client.SendText(roomid, text)
+	return err
+}
+
+func (cli Client) UserID() string {
+	return cli.client.UserID
 }
