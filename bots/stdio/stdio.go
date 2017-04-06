@@ -8,7 +8,7 @@ import (
 )
 func main() {
 	cli := gomatrixbot.Login()
-	roomid := roomid()
+	roomid := gomatrixbot.Roomid()
 	cli.HandleEvent("m.room.message", func(ev *gomatrix.Event) {
 		body, ok := ev.Body()
 		if ok && ev.Sender != cli.UserID() {
@@ -22,17 +22,4 @@ func main() {
 			fmt.Println("Send Failed: ", err)
 		}
 	}	
-}
-
-func roomid() (room string) {
-	file, err := os.Open("roomid")
-	if err != nil {
-		fmt.Println("Cannot open roomid!")
-		os.Exit(0)
-	}
-	_, err = fmt.Fscan(file,&room)
-	if err != nil {
-		panic(err)
-	}
-	return
 }
