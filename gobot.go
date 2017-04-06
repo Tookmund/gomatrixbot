@@ -59,3 +59,16 @@ func (cli Client) SendText(roomid, text string) error {
 func (cli Client) UserID() string {
 	return cli.client.UserID
 }
+
+func Roomid() (room string) {
+	file, err := os.Open("roomid")
+	if err != nil {
+		fmt.Println("Cannot open roomid!")
+		os.Exit(0)
+	}
+	_, err = fmt.Fscan(file,&room)
+	if err != nil {
+		panic(err)
+	}
+	return
+}
